@@ -214,7 +214,8 @@ function showBio(person) {
   const enterHandler = () => {
     overlay.querySelector('.clickEnter').style.opacity = '0';
 
-    audio.currentTime = 0;
+    const startTimes = { aubree: 3.4, charlie: 129.8 };
+    audio.currentTime = startTimes[person] ?? 0;
     audio.play().catch(() => {});
     playBtn.textContent = '||';
 
@@ -227,7 +228,12 @@ function showBio(person) {
     const words =
       person === 'aubree'
         ? [{ text: 'aubree.lat', time: 0 }, { text: ':3', time: 300 }]
-        : [{ text: 'so awesome sauce', time: 0 }];
+        : [    { text: 'ITS', time: 0 },
+    { text: 'LIKE', time: 300 },
+    { text: 'YOU', time: 600 },
+    { text: 'NEVER', time: 800 },
+    { text: 'HAD', time: 2800 },
+    { text: 'WINGS', time: 3000 },];
 
     animationText.innerHTML = '';
     words.forEach(wordObj => {
