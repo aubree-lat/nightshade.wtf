@@ -247,7 +247,7 @@ function showBio(person) {
     setTimeout(() => {
       overlay.classList.add('hidden');
       setTimeout(() => musicPlayer.classList.add('visible'), 200);
-    }, 1000);
+    }, 4000);
 
     overlay.removeEventListener('click', enterHandler);
   };
