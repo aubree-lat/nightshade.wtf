@@ -73,9 +73,27 @@ html, body {
     height: 100%;
     overflow: hidden;
     font-family: 'Quicksand', sans-serif;
-    background: linear-gradient(180deg, var(--bg-base) 0%, var(--bg-mid) 50%, var(--bg-deep) 100%);
+    background: #000;
     color: var(--accent);
-    transition: background 0.8s ease, color 0.8s ease;
+    transition: color 0.8s ease;
+}
+
+/* Tint overlay — above video (z-index 0), below all .page content (z-index 1).
+   Shifts color with the active theme so the video gets the right hue wash. */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: linear-gradient(180deg, var(--bg-base) 0%, var(--bg-mid) 50%, var(--bg-deep) 100%);
+    opacity: 0.55;
+    transition: background 0.8s ease, opacity 0.8s ease;
+}
+
+body.theme-aubree::before,
+body.theme-charlie::before {
+    opacity: 0.45;
 }
 
 /* =============================================
@@ -108,6 +126,7 @@ html, body {
     transform: translateY(20px);
     transition: opacity 0.6s ease, visibility 0.6s ease, transform 0.6s ease;
     z-index: 1;
+    background: transparent;
 }
 
 .page.active {
@@ -336,13 +355,11 @@ html, body {
     overflow: hidden;
 }
 
-/* Apply background when bio page is active */
-#aubreePage.active {
-    background: linear-gradient(180deg, #001a1a 0%, #002a2a 50%, #000d0d 100%);
-}
-
-#charliePage.active {
-    background: linear-gradient(180deg, #1a0005 0%, #2a000a 50%, #0d0003 100%);
+/* Bio pages are transparent so the background video shows through.
+   The tint comes from the body background blending with the video opacity. */
+#aubreePage,
+#charliePage {
+    background: transparent;
 }
 
 /* Back Button */
