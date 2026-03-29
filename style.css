@@ -1,0 +1,831 @@
+/* =============================================
+   nightshade.wtf — style.css
+   Theme vars: :root (global), .theme-aubree, .theme-charlie
+   ============================================= */
+
+/* --- Global Variables (neutral/selection page) --- */
+:root {
+    --accent:        #9d7fb8;
+    --accent-light:  #c8b8e0;
+    --accent-mid:    #b89fd8;
+    --accent-dark:   #7a5c99;
+    --bg-base:       #2a1a2a;
+    --bg-mid:        #3d2a3d;
+    --bg-deep:       #1a0a1a;
+    --glow-a:        rgba(120, 100, 140, 0.6);
+    --glow-b:        rgba(100, 80, 120, 0.4);
+    --border:        rgba(120, 100, 140, 0.5);
+    --border-hover:  rgba(130, 110, 150, 0.8);
+    --card-bg-a:     rgba(100, 80, 120, 0.2);
+    --card-bg-b:     rgba(80, 60, 100, 0.2);
+    --card-bg-c:     rgba(120, 100, 140, 0.2);
+    --infobox-bg:    rgba(100, 80, 120, 0.3);
+    --text-body:     #c0b0d8;
+}
+
+/* --- Aubree: Cyan / Black --- */
+.theme-aubree {
+    --accent:        #00e5ff;
+    --accent-light:  #80ffff;
+    --accent-mid:    #00bcd4;
+    --accent-dark:   #006080;
+    --bg-base:       #001a1a;
+    --bg-mid:        #002a2a;
+    --bg-deep:       #000d0d;
+    --glow-a:        rgba(0, 229, 255, 0.55);
+    --glow-b:        rgba(0, 188, 212, 0.35);
+    --border:        rgba(0, 229, 255, 0.45);
+    --border-hover:  rgba(0, 229, 255, 0.85);
+    --card-bg-a:     rgba(0, 229, 255, 0.08);
+    --card-bg-b:     rgba(0, 188, 212, 0.08);
+    --card-bg-c:     rgba(0, 229, 255, 0.12);
+    --infobox-bg:    rgba(0, 188, 212, 0.18);
+    --text-body:     #b0f0f8;
+}
+
+/* --- Charlie: Red / Black --- */
+.theme-charlie {
+    --accent:        #ff2244;
+    --accent-light:  #ff7090;
+    --accent-mid:    #e01030;
+    --accent-dark:   #7a0010;
+    --bg-base:       #1a0005;
+    --bg-mid:        #2a000a;
+    --bg-deep:       #0d0003;
+    --glow-a:        rgba(255, 34, 68, 0.55);
+    --glow-b:        rgba(224, 16, 48, 0.35);
+    --border:        rgba(255, 34, 68, 0.45);
+    --border-hover:  rgba(255, 34, 68, 0.85);
+    --card-bg-a:     rgba(255, 34, 68, 0.08);
+    --card-bg-b:     rgba(200, 0, 30, 0.08);
+    --card-bg-c:     rgba(255, 34, 68, 0.12);
+    --infobox-bg:    rgba(200, 0, 30, 0.18);
+    --text-body:     #f8b0bc;
+}
+
+/* =============================================
+   Reset & Base
+   ============================================= */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Quicksand', sans-serif;
+    background: linear-gradient(180deg, var(--bg-base) 0%, var(--bg-mid) 50%, var(--bg-deep) 100%);
+    color: var(--accent);
+    transition: background 0.8s ease, color 0.8s ease;
+}
+
+/* =============================================
+   Background Video
+   ============================================= */
+#bgVideo {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    object-fit: cover;
+    pointer-events: none;
+    opacity: 0.6;
+    transition: opacity 0.8s ease;
+}
+
+/* =============================================
+   Page Transitions
+   ============================================= */
+.page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, visibility 0.6s ease, transform 0.6s ease;
+    z-index: 1;
+}
+
+.page.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* =============================================
+   Loading Screen
+   ============================================= */
+#loadingScreen {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(45deg, #000000 0%, #4601b4 25%, #000000 50%, #48008b 75%, #000000 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 8s ease infinite;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+#loadingScreen.hidden {
+    opacity: 0;
+    transform: scale(0.95);
+    pointer-events: none;
+}
+
+.loading-container {
+    width: 80%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#loadingMessage {
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 18px;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+#loadingBar {
+    position: fixed;
+    bottom: 0; left: 0;
+    height: 4px;
+    width: 0%;
+    background: linear-gradient(90deg, #5200b1, #ff69b4);
+    animation: loadingAnimation 2s infinite;
+}
+
+/* =============================================
+   Selection Page
+   ============================================= */
+#selectionPage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.main-title {
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    margin-bottom: 60px;
+    color: var(--accent-light);
+    text-shadow: 0 0 30px var(--glow-a), 0 0 60px var(--glow-b);
+    animation: titlePulse 3s ease-in-out infinite;
+}
+
+.cards-wrapper {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Each card gets its own accent via data attribute */
+.bio-card {
+    position: relative;
+    width: 280px;
+    height: 360px;
+    padding: 30px;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 24px;
+    border: 2px solid rgba(120, 100, 140, 0.5);
+    background: linear-gradient(135deg,
+        rgba(100, 80, 120, 0.2) 0%,
+        rgba(80, 60, 100, 0.2) 50%,
+        rgba(120, 100, 140, 0.2) 100%);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    overflow: hidden;
+    cursor: pointer;
+}
+
+/* Aubree card — cyan tint */
+.bio-card[data-person="aubree"] {
+    border-color: rgba(0, 229, 255, 0.35);
+    background: linear-gradient(135deg,
+        rgba(0, 229, 255, 0.06) 0%,
+        rgba(0, 188, 212, 0.06) 50%,
+        rgba(0, 229, 255, 0.10) 100%);
+}
+
+.bio-card[data-person="aubree"]:hover {
+    border-color: rgba(0, 229, 255, 0.75);
+    box-shadow: 0 16px 48px rgba(0, 229, 255, 0.4), 0 0 60px rgba(0, 188, 212, 0.3);
+}
+
+.bio-card[data-person="aubree"] .card-glow {
+    background: linear-gradient(45deg, #80ffff, #00e5ff, #006080, #80ffff);
+}
+
+/* Charlie card — red tint */
+.bio-card[data-person="charlie"] {
+    border-color: rgba(255, 34, 68, 0.35);
+    background: linear-gradient(135deg,
+        rgba(255, 34, 68, 0.06) 0%,
+        rgba(200, 0, 30, 0.06) 50%,
+        rgba(255, 34, 68, 0.10) 100%);
+}
+
+.bio-card[data-person="charlie"]:hover {
+    border-color: rgba(255, 34, 68, 0.75);
+    box-shadow: 0 16px 48px rgba(255, 34, 68, 0.4), 0 0 60px rgba(200, 0, 30, 0.3);
+}
+
+.bio-card[data-person="charlie"] .card-glow {
+    background: linear-gradient(45deg, #ff7090, #ff2244, #7a0010, #ff7090);
+}
+
+.card-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.5s ease;
+}
+
+.card-glow {
+    position: absolute;
+    top: -2px; left: -2px; right: -2px; bottom: -2px;
+    background-size: 300% 300%;
+    border-radius: 24px;
+    z-index: 0;
+    opacity: 0;
+    filter: blur(12px);
+    animation: glowRotate 6s ease infinite;
+    transition: opacity 0.5s ease;
+}
+
+.bio-card:hover .card-glow { opacity: 0.4; }
+.bio-card:hover .card-content { transform: scale(1.05); }
+.bio-card:hover { transform: translateY(-10px) scale(1.05); }
+
+.card-pfp {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    background: linear-gradient(#0a0a0a, #0a0a0a) padding-box,
+                linear-gradient(135deg, #9d7fb8, #7a5c99, #9d7fb8) border-box;
+    box-shadow: 0 0 30px rgba(120, 100, 140, 0.4), 0 0 60px rgba(60, 60, 60, 0.2);
+    margin-bottom: 20px;
+    transition: all 0.5s ease;
+    object-fit: cover;
+}
+
+.bio-card[data-person="aubree"] .card-pfp {
+    background: linear-gradient(#001a1a, #001a1a) padding-box,
+                linear-gradient(135deg, #00e5ff, #006080, #00e5ff) border-box;
+    box-shadow: 0 0 30px rgba(0, 229, 255, 0.3);
+}
+
+.bio-card[data-person="charlie"] .card-pfp {
+    background: linear-gradient(#1a0005, #1a0005) padding-box,
+                linear-gradient(135deg, #ff2244, #7a0010, #ff2244) border-box;
+    box-shadow: 0 0 30px rgba(255, 34, 68, 0.3);
+}
+
+.bio-card:hover .card-pfp {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.bio-card h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 10px 0;
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
+}
+
+.bio-card[data-person="aubree"] h2 { color: #80ffff; text-shadow: 0 0 10px rgba(0,229,255,0.4); }
+.bio-card[data-person="charlie"] h2 { color: #ff7090; text-shadow: 0 0 10px rgba(255,34,68,0.4); }
+
+.bio-card[data-person="aubree"]:hover h2 { color: #ffffff; text-shadow: 0 0 20px rgba(0,229,255,0.9); }
+.bio-card[data-person="charlie"]:hover h2 { color: #ffffff; text-shadow: 0 0 20px rgba(255,34,68,0.9); }
+
+/* =============================================
+   Bio Pages
+   ============================================= */
+.bio-page {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.bio-page:has(.bio-overlay:not(.hidden)) {
+    overflow: hidden;
+}
+
+/* Apply background when bio page is active */
+#aubreePage.active {
+    background: linear-gradient(180deg, #001a1a 0%, #002a2a 50%, #000d0d 100%);
+}
+
+#charliePage.active {
+    background: linear-gradient(180deg, #1a0005 0%, #2a000a 50%, #0d0003 100%);
+}
+
+/* Back Button */
+.back-btn {
+    position: fixed;
+    top: 20px; left: 20px;
+    z-index: 99;
+    background: linear-gradient(135deg,
+        rgba(var(--btn-rgb), 0.2) 0%,
+        rgba(var(--btn-rgb), 0.3) 100%);
+    padding: 12px 20px;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--accent-light);
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.4s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    letter-spacing: 1px;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateX(-20px);
+}
+
+.theme-aubree .back-btn { --btn-rgb: 0, 229, 255; }
+.theme-charlie .back-btn { --btn-rgb: 255, 34, 68; }
+
+.bio-page.active .back-btn {
+    opacity: 1;
+    transform: translateX(0);
+    transition-delay: 0.3s;
+}
+
+.back-btn:hover {
+    border-color: var(--border-hover);
+    box-shadow: 0 6px 24px var(--glow-a), 0 0 30px var(--glow-b);
+    transform: translateX(-3px);
+    color: #fff;
+}
+
+/* Overlay */
+.bio-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    backdrop-filter: blur(8px);
+    color: #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-size: 2rem;
+    cursor: pointer;
+    z-index: 100;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.theme-aubree .bio-overlay {
+    background: linear-gradient(135deg,
+        rgba(0, 20, 20, 0.88) 0%,
+        rgba(0, 30, 30, 0.88) 100%);
+}
+
+.theme-charlie .bio-overlay {
+    background: linear-gradient(135deg,
+        rgba(20, 0, 5, 0.88) 0%,
+        rgba(30, 0, 8, 0.88) 100%);
+}
+
+.bio-overlay.hidden {
+    opacity: 0;
+    transform: scale(1.05);
+    pointer-events: none;
+}
+
+.clickEnter {
+    font-size: 2rem;
+    animation: pulse 2s ease-in-out infinite;
+    transition: transform 0.3s ease;
+}
+
+.clickEnter:hover { transform: scale(1.1); }
+
+.animationText {
+    margin-top: 20px;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.animationText span {
+    opacity: 0;
+    display: inline-block;
+    margin: 0 2px;
+    text-shadow: 0 0 20px var(--glow-a);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.animationText span.visible { opacity: 1; transform: translateY(0); }
+
+/* Content Wrapper */
+.content-wrapper {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    padding: 50px 0 120px 0;
+    box-sizing: border-box;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease 0.3s, transform 0.8s ease 0.3s;
+}
+
+.bio-page.active .content-wrapper {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Roddybox */
+.roddybox {
+    max-width: 72vw;
+    margin: 0 auto;
+    text-align: center;
+    background: linear-gradient(135deg,
+        var(--card-bg-a) 0%,
+        var(--card-bg-b) 50%,
+        var(--card-bg-c) 100%);
+    padding: 40px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    box-sizing: border-box;
+    backdrop-filter: blur(10px);
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.roddybox:hover { transform: translateY(-5px); }
+
+.roddybox::before {
+    content: '';
+    position: absolute;
+    top: -2px; left: -2px; right: -2px; bottom: -2px;
+    border-radius: 20px;
+    z-index: -1;
+    opacity: 0.2;
+    filter: blur(8px);
+    animation: glowRotate 6s ease infinite;
+}
+
+.theme-aubree .roddybox::before {
+    background: linear-gradient(45deg, #80ffff, #00e5ff, #006080, #80ffff);
+    background-size: 300% 300%;
+}
+
+.theme-charlie .roddybox::before {
+    background: linear-gradient(45deg, #ff7090, #ff2244, #7a0010, #ff7090);
+    background-size: 300% 300%;
+}
+
+/* Headings in bio pages */
+.roddybox h1 {
+    color: var(--accent-light);
+    text-shadow: 0 0 16px var(--glow-a);
+    margin: 8px 0;
+}
+
+/* PFP */
+.pfp {
+    max-width: 160px;
+    max-height: 160px;
+    width: 100%;
+    height: auto;
+    border-radius: 100%;
+    border: 3px solid transparent;
+    object-fit: cover;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.theme-aubree .pfp {
+    background: linear-gradient(#001a1a, #001a1a) padding-box,
+                linear-gradient(135deg, #00e5ff, #006080, #00e5ff) border-box;
+    box-shadow: 0 0 30px rgba(0, 229, 255, 0.4), 0 0 60px rgba(0,188,212,0.2);
+}
+
+.theme-charlie .pfp {
+    background: linear-gradient(#1a0005, #1a0005) padding-box,
+                linear-gradient(135deg, #ff2244, #7a0010, #ff2244) border-box;
+    box-shadow: 0 0 30px rgba(255, 34, 68, 0.4), 0 0 60px rgba(200,0,30,0.2);
+}
+
+.pfp:hover {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.theme-aubree .pfp:hover { box-shadow: 0 0 50px rgba(0,229,255,0.7), 0 0 90px rgba(0,188,212,0.4); }
+.theme-charlie .pfp:hover { box-shadow: 0 0 50px rgba(255,34,68,0.7), 0 0 90px rgba(200,0,30,0.4); }
+
+/* Infobox */
+.infobox {
+    max-width: 68vw;
+    margin: 15px auto;
+    padding: 16px 20px;
+    background: linear-gradient(135deg,
+        rgba(10, 10, 10, 0.4) 0%,
+        var(--infobox-bg) 100%);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    text-align: left;
+    font-size: 0.9em;
+    line-height: 1.5;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(8px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.infobox:hover {
+    transform: translateX(5px);
+    box-shadow: 0 6px 20px var(--glow-a), inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+.infobox h3 {
+    margin: 10px 0 6px 0;
+    font-size: 1.1em;
+    font-weight: 600;
+    color: var(--accent-mid);
+    text-shadow: 0 0 10px var(--glow-b);
+}
+
+.infobox p, .infobox li {
+    margin: 8px 0;
+    color: var(--text-body);
+}
+
+.infobox a, .bio-link {
+    background: linear-gradient(135deg,
+        var(--card-bg-a) 0%,
+        var(--card-bg-c) 100%);
+    padding: 8px 14px;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--accent-mid);
+    display: inline-block;
+    margin: 4px;
+    font-size: 0.85em;
+    transition: all 0.4s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.infobox a:hover, .bio-link:hover {
+    cursor: pointer;
+    border-color: var(--border-hover);
+    box-shadow: 0 4px 16px var(--glow-a), 0 0 20px var(--glow-b);
+    transform: translateY(-2px);
+    color: var(--accent-light);
+}
+
+/* =============================================
+   Music Player
+   ============================================= */
+#musicPlayer {
+    position: fixed;
+    bottom: 15px; right: 15px;
+    background: linear-gradient(135deg,
+        rgba(10, 10, 10, 0.96) 0%,
+        rgba(5, 5, 5, 0.96) 100%);
+    padding: 12px 14px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.8rem;
+    color: var(--accent);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 40px var(--glow-b);
+    backdrop-filter: blur(10px);
+    z-index: 50;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease,
+                border-color 0.8s ease, box-shadow 0.8s ease;
+}
+
+#musicPlayer.visible { opacity: 1; transform: translateY(0); }
+
+#musicPlayer img {
+    width: 45px; height: 45px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 2px solid transparent;
+    background: linear-gradient(#050505, #050505) padding-box,
+                linear-gradient(135deg, var(--accent), var(--accent-dark)) border-box;
+    box-shadow: 0 0 15px var(--glow-b);
+    transition: transform 0.3s ease;
+}
+
+#musicPlayer img:hover { transform: scale(1.1) rotate(5deg); }
+
+#songInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 100px;
+}
+
+#title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--accent-light);
+    text-shadow: 0 0 8px var(--glow-a);
+}
+
+#artist { font-size: 0.7rem; color: var(--accent-mid); }
+
+#musicControls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+#musicControls button {
+    background: linear-gradient(135deg, var(--card-bg-a) 0%, var(--card-bg-b) 100%);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--accent);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 6px 8px;
+    transition: all 0.4s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+#musicControls button:hover {
+    border-color: var(--border-hover);
+    box-shadow: 0 0 16px var(--glow-a);
+    transform: scale(1.15);
+    color: var(--accent-light);
+}
+
+#musicControls button:active { transform: scale(0.95); }
+
+#musicControls input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    border-radius: 3px;
+    cursor: pointer;
+    background: rgba(80, 80, 80, 0.4);
+    transition: all 0.3s ease;
+    border: 1px solid var(--border);
+}
+
+#progress {
+    width: 120px;
+    background: linear-gradient(to right,
+        var(--accent-light) 0%,
+        var(--accent) var(--progress, 0%),
+        rgba(80,80,80,0.4) var(--progress, 0%),
+        rgba(80,80,80,0.4) 100%);
+}
+
+#volume {
+    width: 80px;
+    background: linear-gradient(to right,
+        var(--accent-light) 0%,
+        var(--accent) var(--volume, 30%),
+        rgba(80,80,80,0.4) var(--volume, 30%),
+        rgba(80,80,80,0.4) 100%);
+}
+
+#progress::-webkit-slider-thumb,
+#volume::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--accent-mid);
+    border: 2px solid var(--accent);
+    cursor: pointer;
+    box-shadow: 0 0 12px var(--glow-a);
+    transition: all 0.3s ease;
+}
+
+#progress::-webkit-slider-thumb:hover,
+#volume::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 20px var(--glow-a);
+}
+
+#progress::-moz-range-thumb,
+#volume::-moz-range-thumb {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--accent-mid);
+    border: 2px solid var(--accent);
+    box-shadow: 0 0 12px var(--glow-a);
+    transition: all 0.3s ease;
+}
+
+#progressTime, #volumePercent {
+    min-width: 40px;
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--accent);
+}
+
+/* =============================================
+   Keyframes
+   ============================================= */
+@keyframes loadingAnimation {
+    0% { width: 10%; }
+    50% { width: 80%; }
+    100% { width: 100%; }
+}
+
+@keyframes gradientShift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.6; }
+}
+
+@keyframes titlePulse {
+    0%, 100% { text-shadow: 0 0 30px var(--glow-a), 0 0 60px var(--glow-b); }
+    50%       { text-shadow: 0 0 50px var(--glow-a), 0 0 90px var(--glow-b); }
+}
+
+@keyframes glowRotate {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* =============================================
+   Responsive
+   ============================================= */
+@media screen and (max-width: 768px) {
+    .main-title { font-size: 2rem; margin-bottom: 40px; }
+    .cards-wrapper { gap: 30px; }
+    .bio-card { width: 240px; height: 320px; padding: 25px; }
+    .card-pfp { width: 120px; height: 120px; }
+    .bio-card h2 { font-size: 1.5rem; }
+    .back-btn { top: 15px; left: 15px; padding: 10px 16px; font-size: 0.9rem; }
+    .roddybox { padding: 24px; }
+    .pfp { max-width: 120px; max-height: 120px; }
+    .infobox { max-width: 90%; padding: 12px 16px; font-size: 0.85em; }
+}
+
+@media screen and (max-width: 600px) {
+    #musicPlayer {
+        left: 10px; right: 10px; bottom: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 8px; gap: 8px;
+    }
+    #musicPlayer img { width: 40px; height: 40px; }
+    #songInfo { min-width: 80px; flex: 1; }
+    #title { font-size: 0.8rem; }
+    #artist { font-size: 0.65rem; }
+    #musicControls {
+        width: 100%; justify-content: center;
+        flex-wrap: wrap; gap: 4px;
+    }
+    #progress { width: 100%; order: 1; }
+    #progressTime { order: 2; font-size: 0.65rem; }
+    #volume { width: 60px; }
+    #volumePercent { font-size: 0.65rem; min-width: 30px; }
+    .content-wrapper { padding-bottom: 140px; }
+}
+
+@media screen and (max-width: 480px) {
+    .main-title { font-size: 1.5rem; margin-bottom: 30px; }
+    .bio-card { width: 200px; height: 280px; padding: 20px; }
+    .card-pfp { width: 100px; height: 100px; }
+    .bio-card h2 { font-size: 1.3rem; }
+    .back-btn { top: 10px; left: 10px; padding: 8px 14px; font-size: 0.85rem; }
+    .roddybox { padding: 16px; margin: 16px auto; }
+    .pfp { max-width: 96px; max-height: 96px; }
+    .infobox { padding: 10px 12px; font-size: 0.8em; }
+}
